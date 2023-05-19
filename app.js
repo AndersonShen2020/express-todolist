@@ -23,7 +23,7 @@ mongoose.connection.once('open', () => console.log('connected to database'));
 mongoose.connection.on('error', (error) => console.error('database error', error));
 
 // 新增 todos
-app.post("api/todos", async (req, res) => {
+app.post("/api/todos", async (req, res) => {
     console.log('---- [POST] 開始 ----');
     try{
         console.log('---- [POST] 進入 try，開始設定 todo item ----');
@@ -44,11 +44,11 @@ app.post("api/todos", async (req, res) => {
         const errMsg = `POST Error ${err}`
         res.send({message: errMsg})
     }
-    console.log('----[POST] 結束 ----');
+    console.log('---- [POST] 結束 ----');
 })
 
 // 修改 todos
-app.patch("api/todos/:id", async (req, res) => {
+app.patch("/api/todos/:id", async (req, res) => {
     const  {id: _id}  = req.params
     const item = { 
         ...req.body,
@@ -65,7 +65,7 @@ app.patch("api/todos/:id", async (req, res) => {
 })
 
 // 刪除所有 todos
-app.delete("api/todos", async (req, res) => {
+app.delete("/api/todos", async (req, res) => {
     try{
         const result = await todolist.deleteMany({})
         res.set(header)
@@ -76,7 +76,7 @@ app.delete("api/todos", async (req, res) => {
 })
 
 // 刪除單筆 todos
-app.delete("api/todos/:id", async (req, res) => {
+app.delete("/api/todos/:id", async (req, res) => {
     const  {id: _id}  = req.params
     try{
         const result = await todolist.findOneAndDelete({_id: _id })
@@ -88,7 +88,7 @@ app.delete("api/todos/:id", async (req, res) => {
 })
 
 // 取得所有 todos
-app.get("api/todos", async (req, res) => {
+app.get("/api/todos", async (req, res) => {
     console.log('---- [GET] 開始 ----');
     try{
         const result = await todolist.find({})
@@ -101,7 +101,7 @@ app.get("api/todos", async (req, res) => {
 })
 
 // 取得單一 todos
-app.get("api/todos/:id", async (req, res) => {
+app.get("/api/todos/:id", async (req, res) => {
     const  {id: _id}  = req.params
     try{
         const result = await todolist.findById(_id)
