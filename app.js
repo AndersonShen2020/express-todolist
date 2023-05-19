@@ -1,19 +1,22 @@
+const todolist = require('./models/TodoList')
+require('dotenv-flow').config();
 const bodyParser = require('body-parser')
 const express = require("express");
 const mongoose = require('mongoose');
-const todolist = require('./models/TodoList')
-require('dotenv-flow').config();
+const cors = require('cors')
 const app = express();
 
+
+app.use(cors())
 app.use(bodyParser.json());
 
 // CORS 設定，以及將 Content-Type 設定為 application/json，省去轉換
-const header = {
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'PATCH, POST, GET, OPTIONS, DELETE',
-    'Content-Type': 'application/json'
-}
+// const header = {
+//     'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
+//     'Access-Control-Allow-Origin': '*',
+//     'Access-Control-Allow-Methods': 'PATCH, POST, GET, OPTIONS, DELETE',
+//     'Content-Type': 'application/json'
+// }
 
 // 暫存 todo-list data
 const data = []
@@ -37,7 +40,7 @@ app.post("/api/todos", async (req, res) => {
         const result = await todo.save()
 
         console.log('---- [POST] 開始傳輸 API 回應 ----');
-        res.set(header)
+        // res.set(header)
         res.send(`${result} 
         save 成功`)
     }catch(err){
@@ -57,7 +60,7 @@ app.patch("/api/todos/:id", async (req, res) => {
     }
     try{
         const result = await todolist.findOneAndUpdate({_id: _id }, {...item},{new: true})
-        res.set(header)
+        // res.set(header)
         res.send(`${result} 修改完成`)
     }catch{
         res.send({message: 'PATCH Error'})
@@ -68,7 +71,7 @@ app.patch("/api/todos/:id", async (req, res) => {
 app.delete("/api/todos", async (req, res) => {
     try{
         const result = await todolist.deleteMany({})
-        res.set(header)
+        // res.set(header)
         res.send(result)
     }catch{
         res.send({message: 'DELETE Error'})
@@ -80,7 +83,7 @@ app.delete("/api/todos/:id", async (req, res) => {
     const  {id: _id}  = req.params
     try{
         const result = await todolist.findOneAndDelete({_id: _id })
-        res.set(header)
+        // res.set(header)
         res.send(result)
     }catch{
         res.send({message: 'DELETE Error'})
@@ -92,7 +95,7 @@ app.get("/api/todos", async (req, res) => {
     console.log('---- [GET] 開始 ----');
     try{
         const result = await todolist.find({})
-        res.set(header)
+        // res.set(header)
         res.send(result)
     }catch{
         res.send({message: 'GET Error'})
@@ -105,7 +108,7 @@ app.get("/api/todos/:id", async (req, res) => {
     const  {id: _id}  = req.params
     try{
         const result = await todolist.findById(_id)
-        res.set(header)
+        // res.set(header)
         res.send(result)
     }catch{
         res.send({message: 'GET Error'})
@@ -115,19 +118,19 @@ app.get("/api/todos/:id", async (req, res) => {
 // 404
 app.get("*", function (req, res) { 
     res.status(404);
-    res.set(header)
+    // res.set(header)
     res.send({message: '無此 GET API'})
 })
 
 app.post("*", function (req, res) { 
     res.status(404);
-    res.set(header)
+    // res.set(header)
     res.send({message: '無此 POST API'})
 })
 
 app.delete("*", function (req, res) { 
     res.status(404);
-    res.set(header)
+    // res.set(header)
     res.send({message: '無此 DELETE API'})
 })
 
